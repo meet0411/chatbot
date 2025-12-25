@@ -4,7 +4,7 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 // 🔥 REPLACE THESE WITH YOUR VALUES (COPY FROM FIREBASE SETTINGS)
 const firebaseConfig = {
-    apiKey: "AIzaSyAX7W1tGQoduf48cGdsiIEkiWz0QCXgd3I",
+  apiKey: "AIzaSyAX7W1tGQoduf48cGdsiIEkiWz0QCXgd3I",
   authDomain: "campusquerybot-v2.firebaseapp.com",
   projectId: "campusquerybot-v2",
   storageBucket: "campusquerybot-v2.firebasestorage.app",
@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --------- GEMINI API KEY ----------
-const GEMINI_KEY = "AIzaSyA4t37-5Qxs4ZhsmCXU29AOPkGifNsLhJU";
+const GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE"; // 👈 REPLACE WITH YOUR KEY
 
 // --------- CHAT LOGIC ----------
 async function sendMessage() {
@@ -80,12 +80,12 @@ ${user}
 
   // 👈 THIS MUST EXIST
   const res = await fetch(
-    "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-001:generateContent",
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-goog-api-key": GEMINI_KEY
+
       },
       body: JSON.stringify({
         contents: [
