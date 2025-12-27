@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --------- GEMINI API KEY ----------
-const GEMINI_KEY = "AIzaSyBgWoUp2jrf2U4COWlI55XwTsRjz4vHVbw"; // 👈 REPLACE WITH YOUR KEY95///
+const GEMINI_KEY = "<YOUR_GEMINI_API_KEY>"; // 👈 REPLACE WITH YOUR KEY
 
 // --------- CHAT LOGIC ----------
 async function sendMessage() {
