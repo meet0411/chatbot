@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "campusquerybot-v2"
-  }
+    "default": "chatbot-11042006"
+  },
+  "targets": {},
+  "etags": {}
 }

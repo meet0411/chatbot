@@ -4,19 +4,19 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 // 🔥 REPLACE THESE WITH YOUR VALUES (COPY FROM FIREBASE SETTINGS)
 const firebaseConfig = {
-  apiKey: "AIzaSyAX7W1tGQoduf48cGdsiIEkiWz0QCXgd3I",
-  authDomain: "campusquerybot-v2.firebaseapp.com",
-  projectId: "campusquerybot-v2",
-  storageBucket: "campusquerybot-v2.firebasestorage.app",
-  messagingSenderId: "501352991382",
-  appId: "1:501352991382:web:a3c50e53f4c8d6f38ed0b7"
+  apiKey: "AIzaSyAkpzOFIZuu-E_xdmwXPMWRmgkV0AX3QRE",
+  authDomain: "chatbot-11042006.firebaseapp.com",
+  projectId: "chatbot-11042006",
+  storageBucket: "chatbot-11042006.firebasestorage.app",
+  messagingSenderId: "25635073514",
+  appId: "1:25635073514:web:cd486318c1c9b2f95bd693"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // --------- GEMINI API KEY ----------
-const GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE"; // 👈 REPLACE WITH YOUR KEY
+const GEMINI_KEY = "AIzaSyBgWoUp2jrf2U4COWlI55XwTsRjz4vHVbw"; // 👈 REPLACE WITH YOUR KEY95///
 
 // --------- CHAT LOGIC ----------
 async function sendMessage() {
@@ -80,7 +80,7 @@ ${user}
 
   // 👈 THIS MUST EXIST
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_KEY}`,
     {
       method: "POST",
       headers: {
