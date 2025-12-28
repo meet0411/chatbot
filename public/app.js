@@ -38,10 +38,23 @@ async function sendMessage() {
 
 function addMessage(text, cls) {
   const box = document.getElementById("chat-box");
-  const div = document.createElement("div");
-  div.className = cls;
-  div.innerText = text;
-  box.appendChild(div);
+  
+  // Create main container div (bot or user)
+  const wrapperDiv = document.createElement("div");
+  wrapperDiv.className = cls; // "bot" or "user"
+  
+  // Create the bubble content div
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content";
+  contentDiv.innerText = text;
+  
+  // Append bubble to wrapper
+  wrapperDiv.appendChild(contentDiv);
+  
+  // Append wrapper to chat box
+  box.appendChild(wrapperDiv);
+  
+  // Auto scroll to bottom
   box.scrollTop = box.scrollHeight;
 }
 
