@@ -64,48 +64,73 @@ async function loadFAQs() {
 }
 
 async function askGemini(faq, user) {
+  // 👇 STRONG PROMPT: Covers greetings, typos, identity, and strict facts.
   const prompt = `
-You are a college helpdesk chatbot.
-Answer ONLY using the FAQ below.
+  SYSTEM ROLE:
+  You are the official "College Student Assistant AI". Your tone is helpful, polite, and concise.
 
-If answer not available, say:
-"Please contact the college administration."
+  CONTEXT (KNOWLEDGE BASE):
+  ${faq}
 
-FAQ:
-${faq}
+  YOUR INSTRUCTIONS:
+  1. **Analyze the User's Input:**
+     - Look for keywords and *intent*, even if there are spelling mistakes, short forms (e.g., "req" for required, "min" for minimum), or bad grammar.
+  
+  2. **Handle Greetings & Small Talk:**
+     - If the user says "Hi", "Hello", "Hey", "Good Morning", etc., reply with a friendly welcome message like: "Hello! I am your College Assistant. How can I help you with your campus queries today?"
+     - If the user asks "How are you?", reply politely.
 
-User question:
-${user}
-`;
+  3. **Handle Identity:**
+     - If asked "Who are you?", "What is your name?", or "Who made you?", reply: 
+       "I am the College Inquiry Chatbot, developed by Code Mafia Team to help students."
 
-  // 👈 THIS MUST EXIST
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_KEY}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  4. **Answer Questions (The Core Task):**
+     - Search the "CONTEXT" above for the answer.
+     - **Match the Meaning:** If the user asks "attendance rules" and the FAQ has "What is the minimum attendance?", understand that they match.
+     - **Hinglish/Slang:** Try to understand Indian student slang if used (e.g., "exam kab hai?").
+     - **Strictness:** Do NOT invent college rules. If the specific answer is not in the CONTEXT, say exactly: "I'm sorry, I don't have information on that specific topic. Please contact the college administration."
 
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
-      })
+  USER INPUT:
+  "${user}"
+  `;
+
+  // 👇 API REQUEST (Using the working 'flash-latest' alias)
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }]
+            }
+          ]
+        })
+      }
+    );
+
+    const data = await res.json();
+    
+    // Safety check: Ensure the response format is correct
+    if (data.error) {
+        console.error("Gemini API Error:", data.error);
+        return "My brain is currently overloaded. Please try again in 30 seconds.";
     }
-  );
 
-  const data = await res.json();
-  console.log(data);
+    return (
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Please contact the college administration."
+    );
 
-  return (
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "Please contact the college administration."
-  );
+  } catch (error) {
+    console.error("Network Error:", error);
+    return "I am having trouble connecting to the internet. Please check your connection.";
+  }
 }
-
 
 window.sendMessage = sendMessage;
 
