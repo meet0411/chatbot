@@ -370,7 +370,7 @@ YOUR INSTRUCTIONS:
 
 4. Answer Questions (The Core Task):
    - Search the "CONTEXT" above for the answer.
-   - Match the Meaning: If the user asks "attendance rules" and the FAQ has "What is the minimum attendance?", understand that they match.
+   - Match the Meaning: If the user asks "attendance rules" and the FAQ has "What is the minimum attendance?", understand that they match(this is an example for you).
    - Hinglish/Slang: Try to understand Indian student slang if used (e.g., "exam kab hai?").
    - Strictness: Do NOT invent college rules. If the specific answer is not in the CONTEXT, say exactly: "I'm sorry, I don't have information on that specific topic. Please contact the college administration."
 
@@ -502,7 +502,9 @@ document.addEventListener("DOMContentLoaded", () => {
     startChatBtn.addEventListener("click", openChat);
     newChatBtn.addEventListener("click", newChat);
     closeChatBtn.addEventListener("click", closeChat);
-    minimizeBtn.addEventListener("click", minimizeChat);
+    if (minimizeBtn) {
+        minimizeBtn.addEventListener("click", minimizeChat);
+    }
     clearHistoryBtn.addEventListener("click", clearHistory);
     themeToggle.addEventListener("click", () => {
         const next = document.body.dataset.theme === "dark" ? "light" : "dark";

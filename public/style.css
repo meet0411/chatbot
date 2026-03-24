@@ -809,10 +809,13 @@ body {
     flex: 1;
     min-height: 0;
     display: grid;
-    place-items: center;
+    place-items: start center;
+    align-content: start;
     text-align: center;
     padding: 2rem 1.5rem;
     background: var(--bg-panel);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .about-avatar {
@@ -865,6 +868,41 @@ body {
 
 .feature-row i {
     color: var(--primary);
+}
+
+.team-info-card {
+    width: min(100%, 440px);
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.team-info-card h6 {
+    margin: 0 0 0.85rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.team-members {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 0.85rem;
+    color: var(--muted);
+}
+
+.team-email {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.team-email:hover {
+    text-decoration: underline;
 }
 
 .version-info {
@@ -1018,7 +1056,17 @@ body {
     }
 
     .quick-actions {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.45rem;
+    }
+
+    .quick-btn {
+        padding: 0.65rem 0.35rem;
+        min-width: 0;
+    }
+
+    .quick-btn span {
+        font-size: 0.72rem;
     }
 
     .header-btn {
