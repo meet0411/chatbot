@@ -95,6 +95,5 @@ JavaScript (ES Modules) — Logic and API calls
 
 1️⃣ Clone project / download files
 2️⃣ Open project in VS Code
-3️⃣ Replace Firebase config with your keys
-4️⃣ Replace GEMINI API key
-5️⃣ Open with Live Server
+3️⃣ Replace GEMINI API key
+4️⃣ Open with Live Server
