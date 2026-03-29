@@ -15,7 +15,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Replace with your real Gemini key
-const GEMINI_KEY = "Gimini_key";
+const GEMINI_KEY = "G.K"; // <-- Add your Gemini API key here for testing!
 
 // --------- STATE ----------
 const STORAGE_KEY = "college_ai_chat_history_v2";
@@ -361,21 +361,22 @@ YOUR INSTRUCTIONS:
    - Look for keywords and intent, even if there are spelling mistakes, short forms (e.g., "req" for required, "min" for minimum), or bad grammar.
 
 2. Handle Greetings & Small Talk:
-   - If the user says "Hi", "Hello", "Hey", "Good Morning", etc., reply with a friendly welcome message like: "Hello! I am your College Assistant. How can I help you with your campus queries today?"
-   - If the user asks "How are you?", reply politely.
+   - If the user says "Hi", "Hello", "Hey", etc., reply with a friendly welcome message.
 
 3. Handle Identity:
-   - If asked "Who are you?", "What is your name?", or "Who made you?", reply:
-     "I am the College Inquiry Chatbot, developed by Code Mafia Team to help students."
+   - If asked "Who are you?", reply: "I am the College Inquiry Chatbot, developed by Code Mafia Team to help students."
 
 4. Answer Questions (The Core Task):
    - Search the "CONTEXT" above for the answer.
-   - Match the Meaning: If the user asks "attendance rules" and the FAQ has "What is the minimum attendance?", understand that they match(this is an example for you).
-   - Hinglish/Slang: Try to understand Indian student slang if used (e.g., "exam kab hai?").
-   - Strictness: Do NOT invent college rules. If the specific answer is not in the CONTEXT, say exactly: "I'm sorry, I don't have information on that specific topic. Please contact the college administration."
+   - Match the Meaning: If the user asks "attendance rules" and the FAQ has "What is the minimum attendance?", understand that they match.
+   - Do NOT invent college rules. If the specific answer is not in the CONTEXT, say exactly: "I'm sorry, I don't have information on that specific topic. Please contact the college administration."
 
 USER INPUT:
 "${userQuery}"
+
+IMPORTANT: You must provide the actual answer from the context above. Answer in full, complete sentences. Do not cut off your response. 
+
+AI RESPONSE:
 `;
 }
 
@@ -396,7 +397,7 @@ async function askGemini(faqText, userQuery) {
                     contents: [{ parts: [{ text: prompt }] }],
                     generationConfig: {
                         temperature: 0.3,
-                        maxOutputTokens: 256
+                        maxOutputTokens: 1024
                     }
                 })
             }
@@ -437,10 +438,17 @@ async function sendMessage() {
 
     try {
         const faqs = await loadFAQs();
-        const matchedFaq = findBestFaqMatch(faqs, message);
+        
+        // This is the line that went missing! It defines matchedFaq.
+        const matchedFaq = findBestFaqMatch(faqs, message); 
+        
         const reply = matchedFaq
             ? normalizeMessageText(matchedFaq.answer)
             : await askGemini(buildFaqKnowledgeBase(faqs), message);
+
+        // Safe debugging logs
+        console.log("1. Did we find an exact match in Firebase?", matchedFaq ? "YES" : "NO");
+        console.log("2. The final reply being sent to chat:", reply);
 
         skeleton.remove();
         addMessage(reply, "bot");
@@ -448,7 +456,7 @@ async function sendMessage() {
         currentChatMessages.push({ role: "bot", text: reply });
         saveToHistory(message, reply);
     } catch (error) {
-        console.error(error);
+        console.error("Chat Error:", error);
         skeleton.remove();
         addMessage("Sorry, something went wrong. Please try again.", "bot");
     } finally {
@@ -547,3 +555,9 @@ window.loadChatHistory = loadChatHistory;
 window.sendMessage = sendMessage;
 window.clearHistory = clearHistory;
 window.minimizeChat = minimizeChat;
+
+const reply = matchedFaq
+    ? normalizeMessageText(matchedFaq.answer)
+    : await askGemini(buildFaqKnowledgeBase(faqs), message);
+
+console.log("Gemini's Exact Output:", reply); // <-- Add this here!
