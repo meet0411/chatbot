@@ -97,3 +97,6 @@ JavaScript (ES Modules) — Logic and API calls
 2️⃣ Open project in VS Code
 3️⃣ Replace GEMINI API key
 4️⃣ Open with Live Server
+
+
+Direct Link(Firebase Hosting):[text](https://chatbot-11042006.web.app/)

@@ -2,6 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // --------- FIREBASE SETUP ----------
+// ⚠️ SECURITY NOTE: Firebase credentials are visible in client-side code.
+// For production, use environment variables and security rules in Firebase.
+// These rules prevent unauthorized access: only allow READ on 'faqs' collection.
+// See: https://firebase.google.com/docs/firestore/security/get-started
 const firebaseConfig = {
     apiKey: "AIzaSyAkpzOFIZuu-E_xdmwXPMWRmgkV0AX3QRE",
     authDomain: "chatbot-11042006.firebaseapp.com",
@@ -14,8 +18,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Replace with your real Gemini key
-const GEMINI_KEY = "G.K"; // <-- Add your Gemini API key here for testing!
+// IMPORTANT: Replace with your real Gemini API key
+// Get your key from: https://ai.google.dev/
+// Steps:
+// 1. Go to https://ai.google.dev/
+// 2. Click "Get API key" 
+// 3. Create or use existing Google Cloud project
+// 4. Copy the key and replace "YOUR_GEMINI_API_KEY_HERE" below
+const GEMINI_KEY = "AIzaSyBoHujXliXeMXW9opXa1fA0WsWRPjqEvS4";
 
 // --------- STATE ----------
 const STORAGE_KEY = "college_ai_chat_history_v2";
@@ -192,8 +202,14 @@ function addMessage(text, type, meta = "") {
 
 function addSkeleton() {
     const wrapper = document.createElement("div");
-    wrapper.className = "message-wrapper bot skeleton-message";
-    wrapper.innerHTML = `<div class="skeleton-content"></div>`;
+    wrapper.className = "message-wrapper bot";
+    wrapper.innerHTML = `
+        <div class="message-content">
+            <div class="typing-bubble" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
     chatBox.appendChild(wrapper);
     scrollChatToBottom();
     return wrapper;
@@ -336,10 +352,13 @@ async function loadFAQs() {
         const querySnapshot = await getDocs(collection(db, "faqs"));
         querySnapshot.forEach(doc => {
             const f = doc.data();
-            faqs.push({
-                question: String(f.question || "").trim(),
-                answer: String(f.answer || "").trim()
-            });
+            // Only add FAQs with both question and answer
+            if (f.question && f.answer) {
+                faqs.push({
+                    question: String(f.question).trim(),
+                    answer: String(f.answer).trim()
+                });
+            }
         });
     } catch (error) {
         console.error("Firebase error:", error);
@@ -439,7 +458,14 @@ async function sendMessage() {
     try {
         const faqs = await loadFAQs();
         
-        // This is the line that went missing! It defines matchedFaq.
+        // Validate FAQ data exists
+        if (!faqs || faqs.length === 0) {
+            skeleton.remove();
+            addMessage("I'm unable to access the FAQ database. Please try again later.", "bot");
+            return;
+        }
+        
+        // Find best matching FAQ or use Gemini
         const matchedFaq = findBestFaqMatch(faqs, message); 
         
         const reply = matchedFaq
@@ -542,8 +568,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Open chat automatically if the desktop view is meant to start inside chat
-    // Keep the landing section visible until the user clicks the button.
+    
 });
 
 // --------- GLOBALS FOR INLINE SAFETY ----------
@@ -554,10 +579,4 @@ window.switchTab = switchTab;
 window.loadChatHistory = loadChatHistory;
 window.sendMessage = sendMessage;
 window.clearHistory = clearHistory;
-window.minimizeChat = minimizeChat;
-
-const reply = matchedFaq
-    ? normalizeMessageText(matchedFaq.answer)
-    : await askGemini(buildFaqKnowledgeBase(faqs), message);
-
-console.log("Gemini's Exact Output:", reply); // <-- Add this here!
+window.minimizeChat = minimizeChat; 
