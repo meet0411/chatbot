@@ -88,11 +88,11 @@ This creates unnecessary workload for faculty and administration. **Campus Query
 
 ---
 
-## 🔄 How It Works
+## How It Works
 
 ![How It Works](screenshots/work_flow.jpg)
 
-## 🏗️ System Architecture
+## System Architecture
 
 ![System Architecture](screenshots/system_architecture.jpg)
 
