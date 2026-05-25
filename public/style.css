@@ -588,7 +588,9 @@ body {
 .typing-bubble {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.35rem;
+    min-height: 18px;
 }
 
 .typing-bubble span {
@@ -598,6 +600,7 @@ body {
     background: currentColor;
     opacity: 0.7;
     animation: typingDots 1s infinite ease-in-out;
+    display: inline-block;
 }
 
 .typing-bubble span:nth-child(2) { animation-delay: 0.15s; }
