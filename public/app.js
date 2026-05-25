@@ -25,7 +25,7 @@ const db = getFirestore(app);
 // 2. Click "Get API key" 
 // 3. Create or use existing Google Cloud project
 // 4. Copy the key and replace "YOUR_GEMINI_API_KEY_HERE" below
-const GEMINI_KEY = "AIzaSyBoHujXliXeMXW9opXa1fA0WsWRPjqEvS4";
+const GEMINI_KEY = "YOUR_GEMINI_API_KEY_HERE";
 
 // --------- STATE ----------
 const STORAGE_KEY = "college_ai_chat_history_v2";
