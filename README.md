@@ -1,20 +1,20 @@
-# 🏫 Campus QueryBot
+# Campus QueryBot
 
-> An intelligent FAQ-based chatbot for colleges — delivering instant, verified answers to student queries powered by **Google Gemini AI** and **Firebase Firestore**.
-
----
-
-## 📸 Screenshots
-
-> ![UI](screenshots/home.png)
-
-> ![Chat UI](screenshots/chat.png)
-
-> ![Dark theme](screenshots/dark.png)
+An intelligent FAQ-based chatbot for colleges — delivering instant, verified answers to student queries powered by **Google Gemini AI** and **Firebase Firestore**.
 
 ---
 
-## 📌 Table of Contents
+## Screenshots
+
+ ![UI](screenshots/home.png)
+
+ ![Chat UI](screenshots/chat.png)
+
+ ![Dark theme](screenshots/dark.png)
+
+---
+
+## Table of Contents
 
 - [Overview](#overview)
 - [Problem Statement](#problem-statement)
